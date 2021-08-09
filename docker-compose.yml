@@ -1,0 +1,40 @@
+version: '3'
+services:
+  ############################
+  # hello app + Dapr sidecar
+  ############################
+  hello:
+    build: ./hello
+    command: ["./hello"]
+    ports:
+      - "50007:50007"
+    depends_on:
+      - placement
+    networks:
+      - service-network
+  hello-dapr:
+    image: "daprio/daprd:edge"
+    command: ["./daprd",
+     "-app-id", "hello",
+     "--app-port", "50051",
+     "--dapr-grpc-port", "50007",
+     "--app-protocol", "grpc",
+     "-placement-host-address", "placement:50006",
+     "-components-path", "/components"]
+    volumes:
+        - "./components/:/components"
+    depends_on:
+      - hello
+    network_mode: "service:hello"
+  ############################
+  # Dapr placement service
+  ############################
+  placement:
+    image: "daprio/dapr"
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
+    networks:
+      - service-network
+networks:
+    service-network:
