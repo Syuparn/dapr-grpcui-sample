@@ -29,6 +29,34 @@ services:
       - person
     network_mode: "service:person"
   ############################
+  # order app + Dapr sidecar
+  ############################
+  order:
+    build: ./order
+    command: ["./order"]
+    ports:
+      - "50008:50007"
+    depends_on:
+      - placement
+    networks:
+      - service-network
+  order-dapr:
+    image: "daprio/daprd:1.3.0"
+    command: ["./daprd",
+     "-app-id", "order",
+     "--app-port", "50051",
+     "--dapr-grpc-port", "50007",
+     "--app-protocol", "grpc",
+     "--config", "/manifests/previewConfig.yaml",
+     "-placement-host-address", "placement:50006",
+     "-components-path", "/components"]
+    volumes:
+      - "./components/:/components"
+      - "./manifests/:/manifests"
+    depends_on:
+      - order
+    network_mode: "service:order"
+  ############################
   # grpcui + Dapr sidecar
   ############################
   grpcui:
@@ -38,7 +66,8 @@ services:
       "-bind", "0.0.0.0",
       "-port", "8080",
       "-import-path", "/proto",
-      "-proto", "service.proto",
+      "-proto", "person/service.proto",
+      "-proto", "order/service.proto",
       "grpcui-dapr:50007"]
     ports:
       - "8080:8080"
@@ -46,7 +75,8 @@ services:
       - placement
       - grpcui-dapr
     volumes:
-      - "./person/proto:/proto"
+      - "./person/proto:/proto/person"
+      - "./order/proto:/proto/order"
     networks:
       - service-network
   # used for gRPC server for gRPC UI

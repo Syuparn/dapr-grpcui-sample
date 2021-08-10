@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package order;
+option go_package = "github.com/syuparn/dapr-grpc-sample/order/proto";
+
+import "google/protobuf/timestamp.proto";
+
+service OrderService {
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+  rpc List(ListRequest) returns (ListResponse) {}
+}
+
+message Order {
+  string id = 1;
+  Drink drink = 2;
+  google.protobuf.Timestamp time = 3;
+}
+
+enum Drink {
+  DRINK_UNKNOWN = 0;
+  DRINK_BEER = 1;
+  DRINK_COKE = 2;
+  DRINK_TEA = 3;
+  DRINK_ORANGE_JUICE = 4;
+}
+
+message CreateRequest {
+  Drink drink = 1;
+}
+
+message CreateResponse {
+  Order order = 1;
+}
+
+message ListRequest {}
+
+message ListResponse {
+  repeated Order orders = 1;
+}
