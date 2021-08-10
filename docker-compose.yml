@@ -23,11 +23,47 @@ services:
      "-placement-host-address", "placement:50006",
      "-components-path", "/components"]
     volumes:
-        - "./components/:/components"
-        - "./manifests/:/manifests"
+      - "./components/:/components"
+      - "./manifests/:/manifests"
     depends_on:
       - hello
     network_mode: "service:hello"
+  ############################
+  # grpcui + Dapr sidecar
+  ############################
+  grpcui:
+    build: ./grpcui
+    command: ["grpcui", 
+      "-plaintext",
+      "-bind", "0.0.0.0",
+      "-port", "8080",
+      "-import-path", "/proto",
+      "-proto", "service.proto",
+      "grpcui-dapr:50007"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - placement
+      - grpcui-dapr
+    volumes:
+      - "./hello/proto:/proto"
+    networks:
+      - service-network
+  # used for gRPC server for gRPC UI
+  grpcui-dapr:
+    image: "daprio/daprd:1.3.0"
+    command: ["./daprd",
+     "-app-id", "grpcui",
+     "--dapr-grpc-port", "50007",
+     "--app-protocol", "grpc",
+     "--config", "/manifests/previewConfig.yaml",
+     "-placement-host-address", "placement:50006",
+     "-components-path", "/components"]
+    volumes:
+      - "./components/:/components"
+      - "./manifests/:/manifests"
+    networks:
+      - service-network
   ############################
   # Dapr placement service
   ############################
