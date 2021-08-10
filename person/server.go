@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/syuparn/dapr-grpc-sample/hello/proto"
+	"github.com/syuparn/dapr-grpc-sample/person/proto"
 )
 
 func NewPersonServer() proto.PersonServer {

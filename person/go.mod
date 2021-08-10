@@ -1,4 +1,4 @@
-module github.com/syuparn/dapr-grpc-sample/hello
+module github.com/syuparn/dapr-grpc-sample/person
 
 go 1.16
 

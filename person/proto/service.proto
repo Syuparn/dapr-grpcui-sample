@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package person;
-option go_package = "github.com/syuparn/dapr-grpc-sample/hello/proto";
+option go_package = "github.com/syuparn/dapr-grpc-sample/person/proto";
 
 service Person {
   rpc Create(PersonRequest) returns (PersonResponse) {}

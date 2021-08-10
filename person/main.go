@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/syuparn/dapr-grpc-sample/hello/proto"
+	"github.com/syuparn/dapr-grpc-sample/person/proto"
 )
 
 const ADDRESS = "localhost:50051"

@@ -1,21 +1,21 @@
 version: '3'
 services:
   ############################
-  # hello app + Dapr sidecar
+  # person app + Dapr sidecar
   ############################
-  hello:
-    build: ./hello
-    command: ["./hello"]
+  person:
+    build: ./person
+    command: ["./person"]
     ports:
       - "50007:50007"
     depends_on:
       - placement
     networks:
       - service-network
-  hello-dapr:
+  person-dapr:
     image: "daprio/daprd:1.3.0"
     command: ["./daprd",
-     "-app-id", "hello",
+     "-app-id", "person",
      "--app-port", "50051",
      "--dapr-grpc-port", "50007",
      "--app-protocol", "grpc",
@@ -26,8 +26,8 @@ services:
       - "./components/:/components"
       - "./manifests/:/manifests"
     depends_on:
-      - hello
-    network_mode: "service:hello"
+      - person
+    network_mode: "service:person"
   ############################
   # grpcui + Dapr sidecar
   ############################
@@ -46,7 +46,7 @@ services:
       - placement
       - grpcui-dapr
     volumes:
-      - "./hello/proto:/proto"
+      - "./person/proto:/proto"
     networks:
       - service-network
   # used for gRPC server for gRPC UI
