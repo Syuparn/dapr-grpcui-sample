@@ -10,7 +10,7 @@ import (
 	"github.com/syuparn/dapr-grpc-sample/hello/proto"
 )
 
-const ADDRESS = "0.0.0.0:50051"
+const ADDRESS = "localhost:50051"
 
 func main() {
 	listener, err := net.Listen("tcp", ADDRESS)
@@ -23,5 +23,7 @@ func main() {
 
 	log.Println("server started")
 
-	s.Serve(listener)
+	if err := s.Serve(listener); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }

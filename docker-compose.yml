@@ -13,16 +13,18 @@ services:
     networks:
       - service-network
   hello-dapr:
-    image: "daprio/daprd:edge"
+    image: "daprio/daprd:1.3.0"
     command: ["./daprd",
      "-app-id", "hello",
      "--app-port", "50051",
      "--dapr-grpc-port", "50007",
      "--app-protocol", "grpc",
+     "--config", "/manifests/previewConfig.yaml",
      "-placement-host-address", "placement:50006",
      "-components-path", "/components"]
     volumes:
         - "./components/:/components"
+        - "./manifests/:/manifests"
     depends_on:
       - hello
     network_mode: "service:hello"
@@ -30,7 +32,7 @@ services:
   # Dapr placement service
   ############################
   placement:
-    image: "daprio/dapr"
+    image: "daprio/dapr:1.3.0"
     command: ["./placement", "-port", "50006"]
     ports:
       - "50006:50006"
