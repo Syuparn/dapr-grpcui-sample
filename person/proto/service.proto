@@ -5,6 +5,7 @@ option go_package = "github.com/syuparn/dapr-grpc-sample/person/proto";
 
 service PersonService {
   rpc Create(CreateRequest) returns (CreateResponse) {}
+  rpc List(ListRequest) returns (ListResponse) {}
 }
 
 message Person {
@@ -20,4 +21,10 @@ message CreateRequest {
 
 message CreateResponse {
   Person person = 1;
+}
+
+message ListRequest {}
+
+message ListResponse {
+  repeated Person people = 1;
 }
