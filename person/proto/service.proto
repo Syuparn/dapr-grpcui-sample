@@ -3,8 +3,14 @@ syntax = "proto3";
 package person;
 option go_package = "github.com/syuparn/dapr-grpc-sample/person/proto";
 
-service Person {
+service PersonService {
   rpc Create(CreateRequest) returns (CreateResponse) {}
+}
+
+message Person {
+  int32 id = 1;
+  string name = 2;
+  int32 age = 3;
 }
 
 message CreateRequest {
@@ -13,7 +19,5 @@ message CreateRequest {
 }
 
 message CreateResponse {
-  int32 id = 1;
-  string name = 2;
-  int32 age = 3;
+  Person person = 1;
 }

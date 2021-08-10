@@ -14,86 +14,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// PersonClient is the client API for Person service.
+// PersonServiceClient is the client API for PersonService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type PersonClient interface {
+type PersonServiceClient interface {
 	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 }
 
-type personClient struct {
+type personServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewPersonClient(cc grpc.ClientConnInterface) PersonClient {
-	return &personClient{cc}
+func NewPersonServiceClient(cc grpc.ClientConnInterface) PersonServiceClient {
+	return &personServiceClient{cc}
 }
 
-func (c *personClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+func (c *personServiceClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	out := new(CreateResponse)
-	err := c.cc.Invoke(ctx, "/person.Person/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/person.PersonService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// PersonServer is the server API for Person service.
-// All implementations must embed UnimplementedPersonServer
+// PersonServiceServer is the server API for PersonService service.
+// All implementations must embed UnimplementedPersonServiceServer
 // for forward compatibility
-type PersonServer interface {
+type PersonServiceServer interface {
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
-	mustEmbedUnimplementedPersonServer()
+	mustEmbedUnimplementedPersonServiceServer()
 }
 
-// UnimplementedPersonServer must be embedded to have forward compatible implementations.
-type UnimplementedPersonServer struct {
+// UnimplementedPersonServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedPersonServiceServer struct {
 }
 
-func (UnimplementedPersonServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
+func (UnimplementedPersonServiceServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedPersonServer) mustEmbedUnimplementedPersonServer() {}
+func (UnimplementedPersonServiceServer) mustEmbedUnimplementedPersonServiceServer() {}
 
-// UnsafePersonServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to PersonServer will
+// UnsafePersonServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PersonServiceServer will
 // result in compilation errors.
-type UnsafePersonServer interface {
-	mustEmbedUnimplementedPersonServer()
+type UnsafePersonServiceServer interface {
+	mustEmbedUnimplementedPersonServiceServer()
 }
 
-func RegisterPersonServer(s grpc.ServiceRegistrar, srv PersonServer) {
-	s.RegisterService(&Person_ServiceDesc, srv)
+func RegisterPersonServiceServer(s grpc.ServiceRegistrar, srv PersonServiceServer) {
+	s.RegisterService(&PersonService_ServiceDesc, srv)
 }
 
-func _Person_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PersonService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PersonServer).Create(ctx, in)
+		return srv.(PersonServiceServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/person.Person/Create",
+		FullMethod: "/person.PersonService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PersonServer).Create(ctx, req.(*CreateRequest))
+		return srv.(PersonServiceServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Person_ServiceDesc is the grpc.ServiceDesc for Person service.
+// PersonService_ServiceDesc is the grpc.ServiceDesc for PersonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Person_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "person.Person",
-	HandlerType: (*PersonServer)(nil),
+var PersonService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "person.PersonService",
+	HandlerType: (*PersonServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Create",
-			Handler:    _Person_Create_Handler,
+			Handler:    _PersonService_Create_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

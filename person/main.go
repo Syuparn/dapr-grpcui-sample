@@ -10,18 +10,18 @@ import (
 	"github.com/syuparn/dapr-grpc-sample/person/proto"
 )
 
-const ADDRESS = "localhost:50051"
+const Address = "localhost:50051"
 
 func main() {
-	listener, err := net.Listen("tcp", ADDRESS)
+	listener, err := net.Listen("tcp", Address)
 	if err != nil {
 		panic(fmt.Sprintf("failed to listen: %v", err))
 	}
 
 	s := grpc.NewServer()
-	proto.RegisterPersonServer(s, NewPersonServer())
+	proto.RegisterPersonServiceServer(s, NewPersonServiceServer())
 
-	log.Println("server started")
+	log.Printf("server started on %s", Address)
 
 	if err := s.Serve(listener); err != nil {
 		log.Fatalf("failed to serve: %v", err)
