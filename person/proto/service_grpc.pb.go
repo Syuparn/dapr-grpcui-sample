@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PersonClient interface {
-	Create(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error)
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 }
 
 type personClient struct {
@@ -29,8 +29,8 @@ func NewPersonClient(cc grpc.ClientConnInterface) PersonClient {
 	return &personClient{cc}
 }
 
-func (c *personClient) Create(ctx context.Context, in *PersonRequest, opts ...grpc.CallOption) (*PersonResponse, error) {
-	out := new(PersonResponse)
+func (c *personClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, "/person.Person/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (c *personClient) Create(ctx context.Context, in *PersonRequest, opts ...gr
 // All implementations must embed UnimplementedPersonServer
 // for forward compatibility
 type PersonServer interface {
-	Create(context.Context, *PersonRequest) (*PersonResponse, error)
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	mustEmbedUnimplementedPersonServer()
 }
 
@@ -50,7 +50,7 @@ type PersonServer interface {
 type UnimplementedPersonServer struct {
 }
 
-func (UnimplementedPersonServer) Create(context.Context, *PersonRequest) (*PersonResponse, error) {
+func (UnimplementedPersonServer) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
 func (UnimplementedPersonServer) mustEmbedUnimplementedPersonServer() {}
@@ -67,7 +67,7 @@ func RegisterPersonServer(s grpc.ServiceRegistrar, srv PersonServer) {
 }
 
 func _Person_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PersonRequest)
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func _Person_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/person.Person/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PersonServer).Create(ctx, req.(*PersonRequest))
+		return srv.(PersonServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

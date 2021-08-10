@@ -4,15 +4,15 @@ package person;
 option go_package = "github.com/syuparn/dapr-grpc-sample/person/proto";
 
 service Person {
-  rpc Create(PersonRequest) returns (PersonResponse) {}
+  rpc Create(CreateRequest) returns (CreateResponse) {}
 }
 
-message PersonRequest {
+message CreateRequest {
   string name = 1;
   int32 age = 2;
 }
 
-message PersonResponse {
+message CreateResponse {
   int32 id = 1;
   string name = 2;
   int32 age = 3;

@@ -17,10 +17,10 @@ type personServer struct {
 	proto.UnimplementedPersonServer
 }
 
-func (s *personServer) Create(ctx context.Context, req *proto.PersonRequest) (*proto.PersonResponse, error) {
+func (s *personServer) Create(ctx context.Context, req *proto.CreateRequest) (*proto.CreateResponse, error) {
 	log.Printf("request: %#v\n", req)
 
-	res := &proto.PersonResponse{
+	res := &proto.CreateResponse{
 		Id:   s.cnt,
 		Age:  req.GetAge(),
 		Name: req.GetName(),
